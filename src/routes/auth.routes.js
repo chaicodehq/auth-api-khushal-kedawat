@@ -14,5 +14,5 @@ const router = Router();
 
 // Your routes here
 router.post('/register',  register)
-
+router.post('/login',login)
 export default router;

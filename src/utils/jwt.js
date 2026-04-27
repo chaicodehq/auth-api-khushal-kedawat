@@ -27,8 +27,13 @@ import jwt from 'jsonwebtoken';
  * - JWT payload is NOT encrypted, only signed (it's base64 encoded and readable)
  * - Keep JWT_SECRET secure and never commit it to version control
  */
+
 export function signToken(payload) {
   // Your code here
+const secret = process.env.JWT_SECRET
+const expiresIn = process.env.JWT_EXPIRES_IN || '24h'
+  const token = jwt.sign(payload, secret,{expiresIn:expiresIn})
+  return token
 }
 
 /**
@@ -67,4 +72,8 @@ export function signToken(payload) {
  */
 export function verifyToken(token) {
   // Your code here
+const secret = process.env.JWT_SECRET
+const expiresIn = process.env.JWT_EXPIRES_IN || '24h'
+  const tokenPayload = jwt.verify(token,secret)
+  return tokenPayload
 }
