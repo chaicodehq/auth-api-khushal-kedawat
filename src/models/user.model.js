@@ -31,16 +31,15 @@ const userSchema = new mongoose.Schema(
       unique:true,
       lowercase:true,
       trim:true,
+      validate:function(v){
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+      },
     },
     password:{
       type:String,
       required:true,
-      minLength:6,
+      minlength:6,
       select:false,
-      validator:function(v){
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
-      },
-      message : "not a valid a password"
     },
     role:{
       type:String,
@@ -76,6 +75,7 @@ const userSchema = new mongoose.Schema(
 userSchema.pre('save',async function(next){
  if( this.isModified("password")){
   this.password = await bcrypt.hash(this.password,10)
+  next()
  }
  next()
 })

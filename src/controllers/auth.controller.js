@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-// import { User } from '../models/user.model.js';
+import { User } from '../models/user.model.js';
 import { signToken } from '../utils/jwt.js';
 
 /**
@@ -14,6 +14,21 @@ import { signToken } from '../utils/jwt.js';
 export async function register(req, res, next) {
   try {
     // Your code here
+    const {email , name , password} = req.body
+    const existingUser = await User.findOne({email})
+    if(existingUser){
+      return res.status(409).json({error:{message:"Email already exists"}})
+    }
+    const user = await User.create({
+      name,
+      email,
+      password,
+    })
+    const userObj =  user.toObject()
+    delete userObj.password
+    return res.status(201).json({user:userObj})
+
+
   } catch (error) {
     next(error);
   }
