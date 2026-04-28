@@ -25,6 +25,12 @@ export async function listUsers(req, res, next) {
 export async function getUser(req, res, next) {
   try {
     // Your code here
+    const {id} = req.params
+    const user = await User.findById(id)
+    if(!user){
+      return res.status(404).json({error:{message:"User not found"}})
+    }
+    return res.status(200).json({user})
   } catch (error) {
     next(error);
   }
